@@ -1,0 +1,65 @@
+#container {
+  text-align: center;
+  margin-top: 10%;
+}
+
+#container form {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 35px;
+}
+
+#container button {
+  background: #17a589;
+  padding: 2%;
+  border-radius: 10px;
+}
+
+#edit form {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+#edit h4 {
+  text-align: center;
+}
+
+#projet div {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+#todo {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+#projet button {
+  padding: 5px 10px;
+}
+
+#todo button {
+  padding: 5px 10px;
+}
+
+#container strong {
+  font-size: 20px;
+  line-height: 26px;
+}
+
+#container p {
+  font-size: 16px;
+  line-height: 22px;
+  color: #8c8c8c;
+  margin: 0;
+}
+
+#container a {
+  text-decoration: none;
+}
