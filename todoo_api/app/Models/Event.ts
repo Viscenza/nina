@@ -1,7 +1,7 @@
 import { BaseModel, column, hasMany, HasMany } from "@ioc:Adonis/Lucid/Orm";
-import Todo from "./Todo";
+import Ticket from "./Ticket";
 
-export default class Project extends BaseModel {
+export default class Event extends BaseModel {
   public static table = "project";
 
   @column({ isPrimary: true })
@@ -10,8 +10,20 @@ export default class Project extends BaseModel {
   @column()
   public nom: string;
 
-  @hasMany(() => Todo, {
-    foreignKey: "project_id",
+  @column()
+  public description: string;
+
+  @column()
+  public lieu: string;
+
+  @column()
+  public nbr_ticket: number;
+
+  @column()
+  public prix_ticket: number;
+
+  @hasMany(() => Ticket, {
+    foreignKey: "ticket_id",
   })
-  public todo: HasMany<typeof Todo>;
+  public todo: HasMany<typeof Ticket>;
 }
