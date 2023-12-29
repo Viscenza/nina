@@ -1,40 +1,51 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
-import Project from "App/Models/Project";
-import ProjectValidators from "App/Validators/Project";
+import Event from "App/Models/Event";
+import Ticket from "App/Models/Ticket";
 
 export default class ProjectsController {
   public async index(ctx: HttpContextContract) {
     try {
-      let projects = await Project.all();
-      const projectJson = projects.map((project) => project.serialize());
-      return projectJson;
+      let events = await Event.all();
+      return events;
     } catch {
       return { message: "Data don't found" };
     }
   }
 
-  public async create({ request, response }: HttpContextContract) {
-    const validator = new ProjectValidators();
-    try {
-      await request.validate({
-        schema: validator.projectRequest,
-      });
-    } catch {
-      response.badRequest("Error request is bad");
-    }
-    let { nom } = request.body();
-    const project = await Project.create({ nom: nom });
-    if (project.$isPersisted) {
+  public async create(ctx: HttpContextContract) {
+    let data = ctx.request.body();
+    const event = await Event.create(data);
+    if (event.$isPersisted) {
       return { message: "Success" };
     } else {
       return { message: "Failed" };
     }
   }
 
-  public async delete({ request }: HttpContextContract) {
-    let project = request.param("id");
+  public async update({ request }: HttpContextContract) {
+    let id = request.param("id");
+    let data = request.body();
     try {
-      const data = await Project.findOrFail(project);
+      const event = await Event.findOrFail(id);
+      event
+        .merge({
+          nom: data.nom,
+          description: data.description,
+          lieu: data.lieu,
+          nbr_ticket: data.nbr_ticket,
+          prix_ticket: data.prix_ticket,
+        })
+        .save();
+      return { message: "Success" };
+    } catch {
+      return { message: "Failed" };
+    }
+  }
+
+  public async delete({ request }: HttpContextContract) {
+    let id = request.param("id");
+    try {
+      const data = await Event.findOrFail(id);
       await data.delete();
       return { message: "Success" };
     } catch {

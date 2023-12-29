@@ -1,61 +1,33 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
-import Todo from "App/Models/Todo";
-import Project from "App/Models/Project";
-import TodoValidator from "App/Validators/TodoValidator";
+import User from "App/Models/User";
 
-export default class TodoController {
-  public async index(ctx: HttpContextContract) {
+export default class UserController {
+  public async login({ auth, request, response }: HttpContextContract) {
+    const { email, password } = request.body();
     try {
-      const project_id = ctx.request.param("id");
-      let todo = await Todo.query().where("project_id", project_id);
-      return todo;
+      const token = await auth.use("api").attempt(email, password);
+      response.ok({ message: token.token });
     } catch {
-      return { message: "Failed" };
+      response.unauthorized({ message: "Failed" });
     }
   }
 
-  public async create({ request, response }: HttpContextContract) {
-    const validator = new TodoValidator();
+  public async register({ auth, response, request }: HttpContextContract) {
+    const data = request.body();
     try {
-      await request.validate({ schema: validator.todoData });
-    } catch (error) {
-      response.badRequest("Error: request is bad");
-    }
-    let data = request.body();
-    let project_id = request.param("id");
-    let project = await Project.findOrFail(project_id);
-    let todo = await project.related("todo").create({
-      content: data.content,
-      stat: false,
-    });
-    if (todo.project_id == project.id) {
-      return { message: "Success" };
-    } else {
-      return { message: "Failed" };
+      const user = await User.create(data);
+      await auth.use("api").login(user);
+      response.ok({ message: "Success" });
+    } catch {
+      response.badRequest({ message: "Failed" });
     }
   }
 
-  public async update({ request }: HttpContextContract) {
-    let todo = request.param("id_todo");
-    let body = request.body();
+  public async logout(ctx: HttpContextContract) {
     try {
-      const data = await Todo.findOrFail(todo);
-      data.stat = body.stat;
-      await data.save();
+      ctx.auth.use("api").logout();
       return { message: "Success" };
     } catch {
       return { message: "Failed" };
     }
   }
-
-  public async delete({ request }: HttpContextContract) {
-    let todo_id = request.param("id_todo");
-    try {
-      const data = await Todo.findOrFail(todo_id);
-      await data.delete();
-      return { message: "Success" };
-    } catch {
-      return { message: "Failed" };
-    }
-  }
-}
