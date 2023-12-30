@@ -1,5 +1,13 @@
-import { BaseModel, column, hasMany, HasMany } from "@ioc:Adonis/Lucid/Orm";
+import {
+  BaseModel,
+  column,
+  belongsTo,
+  BelongsTo,
+  hasMany,
+  HasMany,
+} from "@ioc:Adonis/Lucid/Orm";
 import Ticket from "./Ticket";
+import User from "./User";
 
 export default class Event extends BaseModel {
   public static table = "project";
@@ -21,6 +29,14 @@ export default class Event extends BaseModel {
 
   @column()
   public prix_ticket: number;
+
+  @column()
+  public user_id: number;
+
+  @belongsTo(() => User, {
+    foreignKey: "user_id",
+  })
+  public user: BelongsTo<typeof User>;
 
   @hasMany(() => Ticket, {
     foreignKey: "ticket_id",
