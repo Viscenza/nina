@@ -27,15 +27,7 @@ export default class EventController {
     let data = request.body()
     try {
       const event = await Event.findOrFail(id)
-      event
-        .merge({
-          nom: data.nom,
-          description: data.description,
-          lieu: data.lieu,
-          nbr_ticket: data.nbr_ticket,
-          prix_ticket: data.prix_ticket,
-        })
-        .save()
+      event.merge(data).save()
       return { message: 'Success' }
     } catch {
       return { message: 'Failed' }
