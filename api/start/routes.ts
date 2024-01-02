@@ -13,3 +13,8 @@ Route.group(() => {
     Route.post('/login', 'UsersController.login'),
     Route.get('/logout', 'UsersController.logout')
 }).namespace('App/Controllers/Http/')
+
+Route.group(() => {
+  Route.post('/:id_event', 'TicketsController.buyTicket'),
+    Route.get('/:id_event/ticket/:id_user', 'TicketsController.verify')
+}).namespace('App/Controllers/Http')

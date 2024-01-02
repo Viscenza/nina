@@ -3,6 +3,8 @@ import Event from './Event'
 import Users from './Users'
 
 export default class Ticket extends BaseModel {
+  public static table = 'ticket'
+
   @column({ isPrimary: true })
   public id: number
 

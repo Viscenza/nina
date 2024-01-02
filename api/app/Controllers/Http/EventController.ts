@@ -1,6 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Event from 'App/Models/Event'
-import Ticket from 'App/Models/Ticket'
 
 export default class EventController {
   public async index(ctx: HttpContextContract) {
